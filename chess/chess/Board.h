@@ -13,7 +13,7 @@ public:
 	auto end() { return std::end(pieces); }
 	auto cbegin() { return std::cbegin(pieces); }
 	auto cend() { return std::cend(pieces); }
-	int size() const noexcept { pieces.size(); }
+	int size() const noexcept { return pieces.size(); }
 private:
 	void createWhitePawns();
 	void createWhiteHeavyPieces();

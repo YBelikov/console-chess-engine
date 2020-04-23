@@ -13,3 +13,8 @@ Piece& Cell::getPiece() {
 void Cell::setPiece(unique_ptr<Piece> newPiece) {
 	piece = std::move(newPiece);
 }
+
+bool Cell::isEmpty() {
+	if (!piece) return true;
+	return false;
+}

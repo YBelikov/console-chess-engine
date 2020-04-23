@@ -29,9 +29,16 @@ void Display::display(Board& board, std::ostream& out) {
 	for (auto& row : board) {
 		out << board.size() - i << "|";
 		for (auto& cell : row) {
-			out << colorMap[cell.getPiece().getColorOfPiece()] << piecesTypesMap[cell.getPiece().getPieceType()] << "|";
+			if (!cell.isEmpty()) {
+				out << colorMap[cell.getPiece().getColorOfPiece()] << piecesTypesMap[cell.getPiece().getPieceType()] << "|";
+			}
+			else {
+				out << "  " << "|";
+			}
+
 		}
-		out << '\n';
+		out << board.size() - i << '\n';
+		++i;
 	}
 	out << "|----|----|----|----|----|----|----|----|\n";
 }

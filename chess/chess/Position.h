@@ -4,8 +4,8 @@ struct Position {
 	int yPos;
 	int getXPosition() const noexcept;
 	int getYPosition() const noexcept;
-	int changeXPosition(int) noexcept;
-	int changeYPosition(int) noexcept;
+	void changeXPosition(int);
+	void changeYPosition(int);
 	Position(int, int);
 	Position() = default;
 };

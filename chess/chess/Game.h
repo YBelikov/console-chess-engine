@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Board.h"
+#include "Display.h"
 
 class Game {
 public:
@@ -9,7 +10,7 @@ public:
 	void restart();
 private:
 	std::unique_ptr<Board> board;
-	Display display;
+	Display displayer;
 	void initializeBoard();
 
 };

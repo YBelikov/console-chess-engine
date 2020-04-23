@@ -16,12 +16,14 @@ void Game::initializeBoard() {
 }
 
 void Game::start() {
+	initializeBoard();
 	string command{};
-	cin >> command;
-	for (auto& c : command) {
-		std::tolower(c);
-	}
-	while (command != "quit") {
-		display.show(board);
-	}
+	do {
+		displayer.display(*board, cout);
+		cin >> command;
+		for (auto& c : command) {
+			std::tolower(c);
+		}
+	} while (command != "quit");
+	
 }
