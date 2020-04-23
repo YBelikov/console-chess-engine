@@ -1,12 +1,16 @@
 #pragma once
-#include "FigureType.h"
+#include "PieceType.h"
 
 class Piece {
 protected:
-	FigureType type;
+	PieceType type;
 	Color color;
 	bool isKilled;
 public:
-	Piece(FigureType type_, Color color_, bool isKilled_ = false) : type(type_), color(color_), isKilled(isKilled_) {}
+	Piece(PieceType type_, Color color_, bool isKilled_ = false) : type(type_), color(color_), isKilled(isKilled_) {}
+	PieceType getPieceType() const noexcept { return type; }
+	Color getColorOfPiece() const noexcept { return color; }
+	bool isKilled() const noexcept { return isKilled; }
 	virtual ~Piece() {}
+	
 };

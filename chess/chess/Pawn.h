@@ -6,5 +6,5 @@ class Pawn : public Piece {
 public:
 	Pawn() = default;
 	~Pawn() = default;
-	Pawn(Color col) : Piece(FigureType::Pawn, col) {}
+	Pawn(Color col) : Piece(PieceType::Pawn, col) {}
 };
