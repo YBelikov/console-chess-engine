@@ -1,5 +1,6 @@
 #pragma once
 #include "PieceType.h"
+#include "Color.h"
 
 class Piece {
 protected:

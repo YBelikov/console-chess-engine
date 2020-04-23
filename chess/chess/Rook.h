@@ -5,6 +5,7 @@
 class Rook : public Piece{
 public:
 	Rook() = default;
+	~Rook() = default;
 	Rook(Color);
 };
 
