@@ -12,6 +12,7 @@ public:
 	PieceType getPieceType() const noexcept { return type; }
 	Color getColorOfPiece() const noexcept { return color; }
 	bool isKilled() const noexcept { return isKilled; }
+	void setKilled() noexcept { isKilled = true; }
 	virtual ~Piece() {}
 	
 };

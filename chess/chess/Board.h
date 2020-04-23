@@ -9,6 +9,11 @@ public:
 	void intitalize();
 	Board() = default;
 	explicit Board(int);
+	auto begin() { return std::begin(pieces); }
+	auto end() { return std::end(pieces); }
+	auto cbegin() { return std::cbegin(pieces); }
+	auto cend() { return std::cend(pieces); }
+	int size() const noexcept { pieces.size(); }
 private:
 	void createWhitePawns();
 	void createWhiteHeavyPieces();
