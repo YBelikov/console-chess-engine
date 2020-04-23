@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Position.h"
+#include "Color.h"
 
 Board::Board(int size) {
 	pieces.resize(size);
