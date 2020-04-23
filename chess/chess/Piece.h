@@ -1,12 +1,12 @@
 #pragma once
-#include "Position.h"
+#include "FigureType.h"
 
 class Piece {
 protected:
-
+	FigureType type;
+	Color color;
 	bool isKilled;
 public:
-	virtual void makeMove(Position);
-	virtual bool canBeMovedToPosition(Position);
-	virtual ~Piece();
+	Piece(FigureType type_, Color color_, bool isKilled_ = false) : type(type_), color(color_), isKilled(isKilled_) {}
+	virtual ~Piece() {}
 };

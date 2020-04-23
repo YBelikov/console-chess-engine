@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Piece.h"
+#include "Cell.h"
 #include <memory>
 
 class Board {
@@ -26,5 +27,5 @@ private:
 	void createBlackKing();
 	void createBlackQueen();
 
-	std::vector<std::vector<std::shared_ptr<Piece>>> pieces;
+	std::vector<std::vector<Cell>> pieces;
 };
