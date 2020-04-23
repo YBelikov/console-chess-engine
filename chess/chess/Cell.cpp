@@ -6,8 +6,8 @@ Cell::Cell(Position pos, unique_ptr<Piece> p) {
 	piece = std::move(p);
 }
 
-unique_ptr<Piece> Cell::getPiece() {
-	return std::move(piece);
+Piece& Cell::getPiece() {
+	return *piece;
 }
 
 void Cell::setPiece(unique_ptr<Piece> newPiece) {

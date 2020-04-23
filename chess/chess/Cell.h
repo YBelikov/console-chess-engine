@@ -12,5 +12,5 @@ public:
 	Cell() = default;
 	Cell(Position, std::unique_ptr<Piece>);
 	void setPiece(std::unique_ptr<Piece>);
-	std::unique_ptr<Piece> getPiece();
+	Piece& getPiece();
 };

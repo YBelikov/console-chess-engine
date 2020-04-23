@@ -3,11 +3,13 @@
 #include "Board.h"
 
 class Game {
-private:
-	Board board;
-	void initializeBoard();
-
 public:
+	Game();
 	void start();
 	void restart();
+private:
+	std::unique_ptr<Board> board;
+	Display display;
+	void initializeBoard();
+
 };
