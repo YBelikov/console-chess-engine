@@ -23,6 +23,7 @@ void Display::inititalizeColorMap() {
 
 
 void Display::display(Board& board, std::ostream& out) {
+
 	out << "		White							  \n\n";
 	out << "   A     B     C     D     E     F     G     H\n\n";
 	int i{7};
@@ -57,7 +58,6 @@ void Display::displayRow(Board& board, int row, int firstColor, int nextColor, s
 						out << piecesTypesMap[board.getCell(Position(row, pair * 2)).getPiece().getPieceType()];
 						++subcolumn;
 					}
-										//out << (board.getCell(Position(row, pair * 2)).isEmpty() == true ? char(firstColor) : piecesTypesMap[board.getCell(Position(row, pair * 2)).getPiece().getPieceType()]);
 				}
 				else {
 					out << char(firstColor);
@@ -74,7 +74,6 @@ void Display::displayRow(Board& board, int row, int firstColor, int nextColor, s
 						out << piecesTypesMap[board.getCell(Position(row, pair * 2)).getPiece().getPieceType()];
 						++subcolumn;
 					}
-					//	out << (board.getCell(Position(row, pair * 2 + 1)).isEmpty() == true ? char(nextColor) : piecesTypesMap[board.getCell(Position(row, pair * 2 + 1)).getPiece().getPieceType()]);
 				}
 				else {
 					out << char(nextColor);

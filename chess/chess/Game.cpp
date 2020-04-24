@@ -22,7 +22,9 @@ void Game::start() {
 	string command{};
 
 	do {
+		system("cls");
 		displayer.display(*board, cout);
+		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove: ";
 		cin >> command;
 		for (auto& c : command) {
 			std::tolower(c);
