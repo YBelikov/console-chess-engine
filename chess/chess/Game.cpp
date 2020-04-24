@@ -29,6 +29,8 @@ void Game::start() {
 		}
 		if (std::regex_match(command, moveRegex)) {
 			
+
+
 			Position from;
 			Position to;
 			from.changeXPosition(command[0] - 'a');

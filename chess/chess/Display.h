@@ -9,10 +9,14 @@ class Display
 public:
 	Display();
 	void display(Board&, std::ostream&);
+	void displayRow(Board&, int, int, int, std::ostream&);
 private:
 	void initializePiecesTypeMap();
 	void inititalizeColorMap();
-	std::map<PieceType, std::string> piecesTypesMap;
-	std::map<Color, std::string> colorMap;
+	std::map<PieceType, char> piecesTypesMap;
+	std::map<Color, char> colorMap;
+	const int whiteSquare = 0xDB;
+	const int blackSquare = 0xFF;
+	const int subcells = 6;
 };
 

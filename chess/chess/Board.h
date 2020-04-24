@@ -14,6 +14,7 @@ public:
 	auto cbegin() { return std::cbegin(pieces); }
 	auto cend() { return std::cend(pieces); }
 	int size() const noexcept { return pieces.size(); }
+	Cell& getCell(const Position& pos) { return pieces[pos.getYPosition()][pos.getXPosition()]; }
 private:
 	void createWhitePawns();
 	void createWhiteHeavyPieces();

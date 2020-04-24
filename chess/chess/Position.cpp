@@ -1,6 +1,6 @@
 #include "Position.h"
 
-Position::Position(int x, int y) : xPos{ x }, yPos{y} {}
+Position::Position(int y, int x) : xPos{ x }, yPos{y} {}
 
 int Position::getXPosition() const noexcept { return xPos; }
 
