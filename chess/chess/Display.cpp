@@ -24,11 +24,11 @@ void Display::inititalizeColorMap() {
 
 void Display::display(Board& board, std::ostream& out) {
 
-	out << "		White							  \n\n";
+	out << "		Black							  \n\n";
 	out << "   A     B     C     D     E     F     G     H\n\n";
-	int i{7};
-	for (int i = 7; i >= 0; --i) {
-		if (i % 2 == 0) {
+	
+	for (int i = 0; i < board.size(); ++i) {
+		if ((i+1) % 2 == 0) {
 			displayRow(board, i, blackSquare, whiteSquare, out);
 		}
 		else {
@@ -38,7 +38,7 @@ void Display::display(Board& board, std::ostream& out) {
 
 	out << '\n';
 	out << "   A     B     C     D     E     F     G     H\n\n";
-	out << "		Black								\n";
+	out << "		White								\n";
 }
 
 void Display::displayRow(Board& board, int row, int firstColor, int nextColor, std::ostream& out) {
@@ -82,7 +82,7 @@ void Display::displayRow(Board& board, int row, int firstColor, int nextColor, s
 		}
 		if (subline == 1)
 		{
-			out << "   " << row + 1;
+			out << "   " << board.size() - row ;
 		}
 
 		out << '\n';

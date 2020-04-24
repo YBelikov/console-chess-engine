@@ -2,9 +2,9 @@
 
 Position::Position(int y, int x) : xPos{ x }, yPos{y} {}
 
-int Position::getXPosition() const noexcept { return xPos; }
+int Position::getXPosition() const { return xPos; }
 
-int Position::getYPosition() const noexcept { return yPos; }
+int Position::getYPosition() const { return yPos; }
 
 void Position::changeXPosition(int xOffset) { xPos += xOffset; }
 

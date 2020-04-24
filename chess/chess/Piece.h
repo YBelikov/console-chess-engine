@@ -2,6 +2,9 @@
 #include "PieceType.h"
 #include "Color.h"
 
+#include "Position.h"
+class Board;
+
 class Piece {
 protected:
 	PieceType type;
@@ -13,7 +16,7 @@ public:
 	Color getColorOfPiece() const noexcept { return color; }
 	bool isKilled() const noexcept { return killed; }
 	void setKilled() noexcept { killed = true; }
-	bool canMove() const noexcept;
+	virtual bool canMove(Board&, const Position&, const Position&) { return true; };
 	virtual ~Piece() {}
 	
 };

@@ -7,4 +7,5 @@ public:
 	Pawn() = default;
 	~Pawn() = default;
 	Pawn(Color col) : Piece(PieceType::Pawn, col) {}
+	bool canMove(Board&, const Position&, const Position&) override;
 };

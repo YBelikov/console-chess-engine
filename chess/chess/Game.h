@@ -13,4 +13,7 @@ private:
 	std::unique_ptr<Board> board;
 	Display displayer;
 	void initializeBoard();
+	void checkMove(const Position&, const Position&);
+	void makeMove(const Position&, const Position&);
+
 };

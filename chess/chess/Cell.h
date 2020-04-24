@@ -13,5 +13,6 @@ public:
 	Cell(Position, std::unique_ptr<Piece>);
 	void setPiece(std::unique_ptr<Piece>);
 	Piece& getPiece();
+	Piece* releasePiece() { return piece.release(); }
 	bool isEmpty();
 };

@@ -2,11 +2,13 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <stdexcept>
 
 using std::string;
 using std::cin;
 using std::cout;
 using std::regex;
+using std::logic_error;
 
 Game::Game() {
 	board = std::make_unique<Board>(8);
@@ -22,7 +24,7 @@ void Game::initializeBoard() {
 void Game::start() {
 	initializeBoard();
 	
-	const std::regex allowedCommandsRegex("qslm");
+	const std::regex allowedCommandsRegex("[qslm]");
 	char commandChar;
 
 	do {
@@ -54,13 +56,30 @@ void Game::processMoveCommand() {
 		cout << "Wrong format of move";
 	}
 	else {
-		Position from(moveCommand[1], moveCommand[0] - 'a');
-		Position to(moveCommand[4], moveCommand[3] - 'a');
+		Position from(moveCommand[1] - '0' - 1, int(moveCommand[0]) - int('a'));
+		Position to(moveCommand[4] - '0' - 1, int(moveCommand[3]) - int('a'));
 		try {
-			board.movePiece(from, to);
-		}catch(...){
+			checkMove(from, to);
+			makeMove(from, to);
 
+		}catch(logic_error& ex){
+			cout << ex.what();
+			processMoveCommand();
 		}
 	}
 
+}
+
+void Game::checkMove(const Position& from, const Position& to) {
+	try {
+		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
+		board->getCell(from).getPiece().canMove(*board, from, to);
+	}
+	catch (logic_error & ex) {
+		throw;
+	}
+}
+
+void Game::makeMove(const Position& from, const Position& to) {
+	board->getCell(to).setPiece(std::unique_ptr<Piece>(board->getCell(from).releasePiece()));
 }
