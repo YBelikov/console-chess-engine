@@ -8,9 +8,9 @@ public:
 	Game();
 	void start();
 	void restart();
+	void processMoveCommand();
 private:
 	std::unique_ptr<Board> board;
 	Display displayer;
 	void initializeBoard();
-
 };

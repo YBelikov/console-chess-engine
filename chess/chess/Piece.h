@@ -13,6 +13,7 @@ public:
 	Color getColorOfPiece() const noexcept { return color; }
 	bool isKilled() const noexcept { return killed; }
 	void setKilled() noexcept { killed = true; }
+	bool canMove() const noexcept;
 	virtual ~Piece() {}
 	
 };

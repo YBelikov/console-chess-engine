@@ -99,6 +99,10 @@ void Board::createBlackKing() {
 }
 
 
+void Board::movePiece(const Position& from, const Position& to) {
+	
+}
+
 
 
 
