@@ -1,7 +1,7 @@
 #pragma once
 struct Position {
-	int xPos;
 	int yPos;
+	int xPos;
 	int getXPosition() const;
 	int getYPosition() const;
 	void changeXPosition(int);

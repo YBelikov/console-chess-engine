@@ -2,6 +2,8 @@
 #include "Position.h"
 #include <memory>
 #include "Piece.h"
+#include <iostream>
+
 
 class Cell {
 private:
@@ -13,6 +15,9 @@ public:
 	Cell(Position, std::unique_ptr<Piece>);
 	void setPiece(std::unique_ptr<Piece>);
 	Piece& getPiece();
-	Piece* releasePiece() { return piece.release(); }
+	std::unique_ptr<Piece> releasePiece() {
+		std::cout << "Release\n";
+		return std::move(piece); 
+	}
 	bool isEmpty();
 };

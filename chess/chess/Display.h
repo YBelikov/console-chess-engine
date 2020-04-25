@@ -9,6 +9,7 @@ class Display
 public:
 	Display();
 	void display(Board&, std::ostream&);
+	void show(Board&, std::ostream&);
 	void displayRow(Board&, int, int, int, std::ostream&);
 private:
 	void initializePiecesTypeMap();

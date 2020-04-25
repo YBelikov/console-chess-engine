@@ -21,6 +21,20 @@ void Display::inititalizeColorMap() {
 	colorMap[Color::White] = 'W';
 }
 
+void Display::show(Board& board, std::ostream& out) {
+	for (auto& row : board) {
+		for (auto& cell : row) {
+			if (!cell.isEmpty()) {
+				out << colorMap[cell.getPiece().getColorOfPiece()];
+				out << piecesTypesMap[cell.getPiece().getPieceType()];
+			}
+			else {
+				out << "  ";
+			}
+		}
+		out << '\n';
+	}
+}
 
 void Display::display(Board& board, std::ostream& out) {
 
@@ -66,12 +80,12 @@ void Display::displayRow(Board& board, int row, int firstColor, int nextColor, s
 
 			for (int subcolumn = 0; subcolumn < CELL; ++subcolumn) {
 				if (subline == 1 && subcolumn == 2) {
-					if (board.getCell(Position(row, pair * 2)).isEmpty()) {
+					if (board.getCell(Position(row, pair * 2 + 1)).isEmpty()) {
 						out << char(nextColor);
 					}
 					else {
-						out << colorMap[board.getCell(Position(row, pair * 2)).getPiece().getColorOfPiece()];
-						out << piecesTypesMap[board.getCell(Position(row, pair * 2)).getPiece().getPieceType()];
+						out << colorMap[board.getCell(Position(row, pair * 2 + 1)).getPiece().getColorOfPiece()];
+						out << piecesTypesMap[board.getCell(Position(row, pair * 2 + 1)).getPiece().getPieceType()];
 						++subcolumn;
 					}
 				}

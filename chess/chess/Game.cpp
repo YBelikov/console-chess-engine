@@ -56,8 +56,8 @@ void Game::processMoveCommand() {
 		cout << "Wrong format of move";
 	}
 	else {
-		Position from(moveCommand[1] - '0' - 1, int(moveCommand[0]) - int('a'));
-		Position to(moveCommand[4] - '0' - 1, int(moveCommand[3]) - int('a'));
+		Position from(board->size() -  (moveCommand[1] - '0'), int(moveCommand[0]) - int('a'));
+		Position to(board->size() - (moveCommand[4] - '0'), int(moveCommand[3]) - int('a'));
 		try {
 			checkMove(from, to);
 			makeMove(from, to);
@@ -81,5 +81,6 @@ void Game::checkMove(const Position& from, const Position& to) {
 }
 
 void Game::makeMove(const Position& from, const Position& to) {
-	board->getCell(to).setPiece(std::unique_ptr<Piece>(board->getCell(from).releasePiece()));
+	auto ptr = board->getCell(from).releasePiece();
+	board->getCell(to).setPiece(std::move(ptr));
 }
