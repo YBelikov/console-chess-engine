@@ -34,9 +34,9 @@ void Bishop::checkDiagonalInSomeDirection(Game& game, const Position& from, cons
 	Position current = from;
 	current.changeXPosition(xDelta);
 	current.changeYPosition(yDelta);
-	do {
+	while (current != to) {
 		if (!game.getBoard().getCell(current).isEmpty()) throw std::logic_error("There is another piece on diagonal path!\n");
 		current.changeXPosition(xDelta);
 		current.changeYPosition(yDelta);
-	} while (current != to);
+	}
 }
