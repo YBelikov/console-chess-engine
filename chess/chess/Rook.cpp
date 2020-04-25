@@ -26,13 +26,13 @@ void Rook::checkVerticalPath(const Game& game, const Position& from, const Posit
 	cell.changeYPosition(difference);
 	if (to.getYPosition() > from.getYPosition()) {
 		while (cell.getYPosition() < to.getYPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Queen can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Rook can't jump over it!\n");
 			cell.changeYPosition(difference);
 		}
 	}
 	else if (to.getYPosition() < from.getYPosition()) {
 		while (cell.getYPosition() > to.getYPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Queen can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Rook can't jump over it!\n");
 			cell.changeYPosition(difference);
 		}
 	}
