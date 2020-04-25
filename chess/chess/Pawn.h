@@ -13,5 +13,6 @@ public:
 	void canMove(Game&, const Position&, const Position&) override;
 	void checkDoubleMove(Game&, const Position&, const Position&);
 	void checkForCapturing(Game&, const Position&, const Position&);
-	void checkForPromotion(Game&, Board&, const Position&, const Position&);
+	void checkForPromotion(Game&, const Position&, const Position&);
+	void checkForEnpassant(Game&, const Position&, const Position&, std::pair<Position, Position>&);
 };

@@ -19,6 +19,12 @@ void Pawn::canMove(Game& game, const Position& from, const Position& to) {
 			throw logic_error("Pawn can't make this move\n");
 		}
 	}
+	else if (color == Color::White && from.getYPosition() == 3 && to.getYPosition() == 2 && abs(from.getXPosition() - to.getXPosition()) == 1 ||
+		color == Color::Black && from.getYPosition() == 4 && to.getYPosition() == 5 && abs(from.getXPosition() - to.getXPosition()) == 1) {
+		auto lastMove = game.getLastMoveFromStory();
+		checkForEnpassant(game, from, to, lastMove);
+		game.getBoard().getCell(lastMove.second).releasePiece();
+	}
 	else if(abs(to.getYPosition() - from.getYPosition()) == 1) {
 		checkForCapturing(game, from, to);
 	}
@@ -60,8 +66,15 @@ void Pawn::checkForCapturing(Game& game, const Position& from, const Position& t
 	}
 }
 
-void Pawn::checkForPromotion(Game& game, Board& board, const Position& from, const Position& to) {
-	if ((color == Color::White && to.getYPosition() == 0) || (color == Color::Black && to.getYPosition() == board.size() - 1)) {
+void Pawn::checkForPromotion(Game& game, const Position& from, const Position& to) {
+	if ((color == Color::White && to.getYPosition() == 0) || (color == Color::Black && to.getYPosition() == game.getBoard().size() - 1)) {
 		game.makePromotionForPawnAtPosition(from, to);
 	}
+}
+
+void Pawn::checkForEnpassant(Game& game, const Position& from, const Position& to, std::pair<Position, Position>& lastMove) {
+	auto lastPosition = lastMove.second;
+	if (game.getBoard().getCell(lastPosition).getPiece().getPieceType() != PieceType::Pawn) throw logic_error("You can't make enpassant for non paws!\n");
+	if (!(abs(lastMove.first.getYPosition() - lastMove.second.getYPosition()) == 2 && abs(from.getXPosition() - lastPosition.getXPosition()) == 1))
+		throw logic_error("Something went wrong with your enpassant!\n");
 }

@@ -58,6 +58,7 @@ void Game::processMoveCommand() {
 		try {
 			checkMove(from, to);
 			makeMove(from, to);
+			addMoveToStory(from, to);
 
 		}catch(logic_error& ex){
 			cout << ex.what();
@@ -110,3 +111,10 @@ void Game::makePromotionForPawnAtPosition(const Position& from, const Position& 
 	board->setNewPiece(pieceChar, to, col);
 }
 
+void Game::addMoveToStory(Position& from, Position& to) {
+	movesStory.push_back(std::make_pair(from, to));
+}
+
+std::pair<Position, Position> Game::getLastMoveFromStory() const {
+	return movesStory.back();
+}
