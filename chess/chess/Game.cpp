@@ -73,12 +73,25 @@ void Game::processMoveCommand() {
 void Game::checkMove(const Position& from, const Position& to) {
 	try {
 		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
+		if(checkDoesNextCellOcupiedByPieceOfSameColor(from, to)) throw logic_error("The cell occupied by piece of your color\n");
 		board->getCell(from).getPiece().canMove(*board, from, to);
 	}
 	catch (logic_error & ex) {
 		throw;
 	}
 }
+
+bool Game::checkBetweenCells(const Position& from, const Position& to) {
+	return true;
+}
+
+bool Game::checkDoesNextCellOcupiedByPieceOfSameColor(const Position& from, const Position& to) {
+	if (!board->getCell(to).isEmpty()) {
+		if (board->getCell(to).getPiece().getColorOfPiece() == board->getCell(from).getPiece().getColorOfPiece()) return true;
+	}
+	return false;
+}
+
 
 void Game::makeMove(const Position& from, const Position& to) {
 	auto ptr = board->getCell(from).releasePiece();

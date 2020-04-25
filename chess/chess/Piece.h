@@ -16,7 +16,7 @@ public:
 	Color getColorOfPiece() const noexcept { return color; }
 	bool isKilled() const noexcept { return killed; }
 	void setKilled() noexcept { killed = true; }
-	virtual bool canMove(Board&, const Position&, const Position&) { return true; };
+	virtual void canMove(Board&, const Position&, const Position&) {};
 	virtual ~Piece() {}
 	
 };

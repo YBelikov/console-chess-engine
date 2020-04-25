@@ -15,5 +15,6 @@ private:
 	void initializeBoard();
 	void checkMove(const Position&, const Position&);
 	void makeMove(const Position&, const Position&);
-
+	bool checkBetweenCells(const Position&, const Position&);
+	bool checkDoesNextCellOcupiedByPieceOfSameColor(const Position&, const Position&);
 };
