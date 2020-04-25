@@ -15,6 +15,7 @@ public:
 	auto cend() { return std::cend(pieces); }
 	int size() const noexcept { return pieces.size(); }
 	Cell& getCell(const Position& pos) { return pieces[pos.getYPosition()][pos.getXPosition()]; }
+	void setNewPiece(char, const Position&, const Color&);
 
 private:
 	void createWhitePawns();

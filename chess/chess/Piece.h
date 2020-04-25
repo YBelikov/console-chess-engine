@@ -4,6 +4,7 @@
 
 #include "Position.h"
 class Board;
+class Game;
 
 class Piece {
 protected:
@@ -16,7 +17,7 @@ public:
 	Color getColorOfPiece() const noexcept { return color; }
 	bool isKilled() const noexcept { return killed; }
 	void setKilled() noexcept { killed = true; }
-	virtual void canMove(Board&, const Position&, const Position&) {};
+	virtual void canMove(Game& , const Position&, const Position&) {};
 	virtual ~Piece() {}
 	
 };

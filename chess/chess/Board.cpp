@@ -98,6 +98,25 @@ void Board::createBlackKing() {
 	pieces[0][4] = Cell(Position(0, 4), std::make_unique<King>(Color::Black));
 }
 
+void Board::setNewPiece(char pieceChar, const Position& to, const Color& col) {
+	switch (pieceChar) {
+	case 'Q':
+		getCell(to).setPiece(std::make_unique<Queen>(col));
+		break;
+	case 'N':
+		getCell(to).setPiece(std::make_unique<Knight>(col));
+		break;
+	case 'B':
+		getCell(to).setPiece(std::make_unique<Bishop>(col));
+		break;
+	case 'R':
+		getCell(to).setPiece(std::make_unique<Rook>(col));
+		break;
+	default:
+		return;
+	}
+}
+
 
 
 

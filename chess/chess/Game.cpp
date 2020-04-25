@@ -3,6 +3,7 @@
 #include <string>
 #include <regex>
 #include <stdexcept>
+#include <memory>
 
 using std::string;
 using std::cin;
@@ -12,7 +13,6 @@ using std::logic_error;
 
 Game::Game() {
 	board = std::make_unique<Board>(8);
-	
 }
 
 
@@ -23,17 +23,14 @@ void Game::initializeBoard() {
 
 void Game::start() {
 	initializeBoard();
-	
 	const std::regex allowedCommandsRegex("[qslm]");
 	char commandChar;
-
 	do {
 		system("cls");
 		displayer.display(*board, cout);
 		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove: ";
 		cin >> commandChar;
 		std::tolower(commandChar);
-	
 		if (!std::regex_match(string{ commandChar }, allowedCommandsRegex)) {
 			cout << "Wrong option\n";
 		}
@@ -53,7 +50,7 @@ void Game::processMoveCommand() {
 	string moveCommand{};
 	cin >> moveCommand;
 	if (!std::regex_match(moveCommand, moveRegex)) {
-		cout << "Wrong format of move";
+		cout << "Wrong format of move\n";
 	}
 	else {
 		Position from(board->size() -  (moveCommand[1] - '0'), int(moveCommand[0]) - int('a'));
@@ -73,23 +70,23 @@ void Game::processMoveCommand() {
 void Game::checkMove(const Position& from, const Position& to) {
 	try {
 		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
-		if(checkDoesNextCellOcupiedByPieceOfSameColor(from, to)) throw logic_error("The cell occupied by piece of your color\n");
-		board->getCell(from).getPiece().canMove(*board, from, to);
+		checkDoesNextCellOcupiedByPieceOfSameColor(from, to);
+		board->getCell(from).getPiece().canMove(*this, from, to);
 	}
 	catch (logic_error & ex) {
 		throw;
 	}
 }
 
-bool Game::checkBetweenCells(const Position& from, const Position& to) {
-	return true;
+void Game::checkBetweenCells(const Position& from, const Position& to) {
+	return;
 }
 
-bool Game::checkDoesNextCellOcupiedByPieceOfSameColor(const Position& from, const Position& to) {
+void Game::checkDoesNextCellOcupiedByPieceOfSameColor(const Position& from, const Position& to) {
 	if (!board->getCell(to).isEmpty()) {
-		if (board->getCell(to).getPiece().getColorOfPiece() == board->getCell(from).getPiece().getColorOfPiece()) return true;
+		if (board->getCell(to).getPiece().getColorOfPiece() == board->getCell(from).getPiece().getColorOfPiece()) 
+			throw logic_error("Cell occupied by piece of the same color\n");
 	}
-	return false;
 }
 
 
@@ -97,3 +94,19 @@ void Game::makeMove(const Position& from, const Position& to) {
 	auto ptr = board->getCell(from).releasePiece();
 	board->getCell(to).setPiece(std::move(ptr));
 }
+
+void Game::makePromotionForPawnAtPosition(const Position& from, const Position& to) {
+	std::regex pieceRegex("[qnbr]");
+	cout << "Your pawn should be promoted! Choose new figure(Q, N, B, R): ";
+	char pieceChar{};
+	cin >> pieceChar;
+	std::tolower(pieceChar);
+	if (!std::regex_match(std::string{ pieceChar }, pieceRegex)) {
+		cout << "You can choose only from proposed pieces! Try again!\n";
+		makePromotionForPawnAtPosition(from, to);
+	}
+	Color col = board->getCell(from).getPiece().getColorOfPiece();
+	board->getCell(from).releasePiece();
+	board->setNewPiece(pieceChar, to, col);
+}
+
