@@ -13,7 +13,10 @@ using std::logic_error;
 
 Game::Game() {
 	board = std::make_unique<Board>(8);
+	writer = std::make_unique<Writer>();
 	createCastlingsTable();
+	gameStopped = false;
+	gameSaved = false;
 }
 
 
@@ -39,6 +42,13 @@ void Game::start() {
 		else turnColor = Color::White;
 		system("cls");
 		displayer.display(*board, cout);
+		if (doesKingInCheck()) {
+			if (checkMate()) {
+				showWinningMessage();
+				gameStopped = true;
+			}
+			else showMessageAboutCheck();
+		}
 		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove: ";
 		cin >> commandChar;
 		std::tolower(commandChar);
@@ -48,7 +58,15 @@ void Game::start() {
 		else {
 			switch (commandChar) {
 			case 'm':
-				processMoveCommand();
+				if (!gameStopped) {
+					processMoveCommand();
+					gameSaved = false;
+					break;
+				}
+				cout << "Game stopped! You can't make moves anymore!\n";
+				break;
+			case 's':
+				processSaveCommand();
 				break;
 			}
 		}
@@ -74,7 +92,7 @@ void Game::processMoveCommand() {
 			checkMove(from, to);
 			makeMove(from, to);
 			addMoveToStory(from, to);
-
+			
 		}catch(logic_error& ex){
 			cout << ex.what();
 			processMoveCommand();
@@ -353,5 +371,48 @@ void Game::applyCastling(const Position& from, const Position& to) {
 	else {
 		Position queenSideRookPosition(to.getYPosition(), 0);
 		makeMove(queenSideRookPosition, Position(to.getYPosition(), to.getXPosition() + 1));
+	}
+}
+
+void Game::showMessageAboutCheck() {
+	if (turnColor == Color::White) {
+		cout << "White king in check!\n";
+	}
+	else if (turnColor == Color::Black) {
+		cout << "Black king in check!\n";
+	}
+}
+
+void Game::showWinningMessage() {
+	if (turnColor == Color::White) {
+		cout << "Checkmate! Black wins!\n";
+	}
+	else if (turnColor == Color::Black) {
+		cout << "Checkmate! White wins!\n";
+	}
+}
+
+bool Game::checkMate(){
+	return false;
+}
+
+
+void Game::processSaveCommand() {
+	if (gameSaved) {
+		cout << "Game has been already saved!\n";
+		return;
+	}
+	cout << "Now type name of file(without extention) where you would like to save the game: ";
+	string fileName{};
+	cin >> fileName;
+	fileName += ".txt";
+	try {
+		writer->writeBoardTo(*this, fileName);
+		gameSaved = true;
+	}
+	catch (std::domain_error & er) {
+		cout << er.what();
+		cout << "Try again!\n";
+		processSaveCommand();
 	}
 }

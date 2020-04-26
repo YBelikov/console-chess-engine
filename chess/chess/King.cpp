@@ -21,7 +21,7 @@ void King::canMove(Game& game, const Position& from, const Position& to) {
 
 		}
 		else {
-			if (!game.doesCastlingApplied(Side::QueenSide)) throw std::logic_error("Castling is not allowed!\n");
+			if (game.doesCastlingApplied(Side::QueenSide)) throw std::logic_error("Castling is not allowed!\n");
 			if (game.checkHorizontalPath(from, Position(to.getYPosition(), 0))) throw std::logic_error("Can't apply castling! There is a piece between rook and king!\n");
 			if (game.doesCellUnderAttack(Position(from.getYPosition(), from.getXPosition() - 1))) throw std::logic_error("Cell near to king is under attack! Can't apply castling!\n");
 		}

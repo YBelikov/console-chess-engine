@@ -2,7 +2,9 @@
 
 #include "Board.h"
 #include "Display.h"
+#include "Writer.h"
 #include <vector>
+
 enum class Side { QueenSide, KingSide };
 class Game {
 public:
@@ -14,7 +16,7 @@ public:
 	bool doesKingInCheck();
 	Board& getBoard() const { return *board; }
 	std::pair<Position, Position> getLastMoveFromStory() const;
-
+	Color getCurrentTurn() const { return turnColor; }
 	bool checkDiagonalPath(const Position&, const Position&);
 	bool checkVerticalPath(const Position&, const Position&);
 	bool checkHorizontalPath(const Position&, const Position&);
@@ -23,15 +25,19 @@ public:
 	void disallowCastling();
 	void disallowCastlingForOneSide(Side side);
 	void applyCastling(const Position&, const Position&);
-
+	
 private:
 
 	std::unique_ptr<Board> board;
 	std::vector<std::pair<Position, Position>> movesStory;
+	std::unique_ptr<Writer> writer;
 	Display displayer;
 	Color turnColor;
 	std::map<Color, bool> kingSideCastlingsApplied;
 	std::map<Color, bool> queenSideCastlingsApplied;
+	bool gameStopped;
+	bool gameSaved;
+
 	void initializeBoard();
 	void checkMove(const Position&, const Position&);
 	void makeMove(const Position&, const Position&);
@@ -53,5 +59,11 @@ private:
 	bool checkHorizontalEnemies(const Position&, int);
 	bool checkVerticalEnemies(const Position&, int);
 	bool checkDiagonalEnemies(const Position&, int, int);
+
+	bool checkMate();
+	void showWinningMessage();
+	void showMessageAboutCheck();
+
+	void processSaveCommand();
 
 };
