@@ -78,6 +78,7 @@ void Game::checkMove(const Position& from, const Position& to) {
 		if (board->getCell(from).getPiece().getColorOfPiece() != turnColor) throw logic_error("You're trying to move opponent's piece!\n");
 		checkDoesNextCellOcupiedByPieceOfSameColor(from, to);
 		board->getCell(from).getPiece().canMove(*this, from, to);
+		if (wouldKingBeInCheck(from, to)) throw logic_error("King would be in check after this move! Can't move the piece!\n");
 	}
 	catch (logic_error & ex) {
 		throw;
@@ -200,28 +201,31 @@ bool Game::doesKingInCheck() {
 Position Game::findKingPosition(Color& turnColor) {
 	for (auto& row : *board) {
 		for (auto& cell : row) {
-			if (cell.getPiece().getPieceType() == PieceType::King && turnColor == cell.getPiece().getColorOfPiece())
-				return cell.getPosition();
+			if (!cell.isEmpty()) {
+				if (cell.getPiece().getPieceType() == PieceType::King && turnColor == cell.getPiece().getColorOfPiece())
+					return cell.getPosition();
+			}
 		}
 	}
+	throw std::logic_error("Something with your king!\n");
 }
 
 bool Game::doesCellUnderAttack(const Position& pos) {
-	return checkHorizontalAttackers(pos) && checkVerticalAttackers(pos) 
-		&& checkDiagonalAttackers(pos) && checkLShapedAttackers(pos);
+	return checkHorizontalAttackers(pos) || checkVerticalAttackers(pos) 
+		|| checkDiagonalAttackers(pos) || checkLShapedAttackers(pos);
 }
 
 bool Game::checkHorizontalAttackers(const Position& pos) {
-	return checkHorizontalEnemies(pos, 1) && checkHorizontalEnemies(pos, -1);
+	return checkHorizontalEnemies(pos, 1) || checkHorizontalEnemies(pos, -1);
 }
 
 bool Game::checkVerticalAttackers(const Position& pos) {
-	return checkVerticalEnemies(pos, 1) && checkVerticalEnemies(pos, -1);
+	return checkVerticalEnemies(pos, 1) || checkVerticalEnemies(pos, -1);
 }
 
 bool Game::checkDiagonalAttackers(const Position& pos){
-	return checkDiagonalEnemies(pos, 1, 1) && checkDiagonalEnemies(pos, -1, 1) 
-	&& checkDiagonalEnemies(pos, 1, -1) && checkDiagonalEnemies(pos, -1, -1);
+	return checkDiagonalEnemies(pos, 1, 1) || checkDiagonalEnemies(pos, -1, 1) 
+	|| checkDiagonalEnemies(pos, 1, -1) || checkDiagonalEnemies(pos, -1, -1);
 }
 
 bool Game::checkHorizontalEnemies(const Position& start, int xOffset) {
@@ -257,7 +261,7 @@ bool Game::checkVerticalEnemies(const Position& start, int yOffset) {
 		}
 		current.changeYPosition(yOffset);
 	}
-
+	return false;
 }
 
 bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset) {
@@ -265,7 +269,7 @@ bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset)
 	current.changeXPosition(xOffset);
 	current.changeYPosition(yOffset);
 	while (current.getXPosition() < board->size() && current.getXPosition() >= 0
-		&& current.getYPosition() < board->size() && current.getXPosition() >= 0) {
+		&& current.getYPosition() < board->size() && current.getYPosition() >= 0) {
 		if (!board->getCell(current).isEmpty()) {
 			if (board->getCell(current).getPiece().getColorOfPiece() == turnColor) break;
 			else {
@@ -278,6 +282,7 @@ bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset)
 		current.changeXPosition(xOffset);
 		current.changeYPosition(yOffset);
 	}
+	return false;
 }
 
 bool Game::checkLShapedAttackers(const Position& pos) {
@@ -300,3 +305,12 @@ bool Game::checkLShapedAttackers(const Position& pos) {
 	return false;
 }
 
+bool Game::wouldKingBeInCheck(const Position& from, const Position& to) {
+	makeMove(from, to);
+	if (doesKingInCheck()) {
+		makeMove(to, from);
+		return true;
+	}
+	makeMove(to, from);
+	return false;
+}

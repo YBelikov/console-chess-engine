@@ -13,6 +13,5 @@ void King::canMove(Game& game, const Position& from, const Position& to) {
 	}
 	else if (to.getYPosition() == from.getYPosition() && abs(to.getXPosition() - from.getYPosition()) == 2) {
 		if (game.doesKingInCheck()) throw std::logic_error("King can make castling unless it in check!\n");
-
 	}
 }

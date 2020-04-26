@@ -17,7 +17,7 @@ public:
 	bool checkDiagonalPath(const Position&, const Position&);
 	bool checkVerticalPath(const Position&, const Position&);
 	bool checkHorizontalPath(const Position&, const Position&);
-
+	bool doesCellUnderAttack(const Position&);
 
 private:
 
@@ -32,11 +32,12 @@ private:
 	void checkDoesNextCellOcupiedByPieceOfSameColor(const Position&, const Position&);
 	void addMoveToStory(Position&, Position&);
 	
+	bool wouldKingBeInCheck(const Position&, const Position&);
+
 	bool checkDiagonalInSomeDirection(const Position&, const Position&, int, int);
 	
 	Position findKingPosition(Color&);
-	bool doesCellUnderAttack(const Position&);
-	
+
 	bool checkHorizontalAttackers(const Position&);
 	bool checkVerticalAttackers(const Position&);
 	bool checkDiagonalAttackers(const Position&);
