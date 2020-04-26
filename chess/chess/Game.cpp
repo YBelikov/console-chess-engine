@@ -118,3 +118,5 @@ void Game::addMoveToStory(Position& from, Position& to) {
 std::pair<Position, Position> Game::getLastMoveFromStory() const {
 	return movesStory.back();
 }
+
+

@@ -26,13 +26,13 @@ void Rook::checkVerticalPath(const Game& game, const Position& from, const Posit
 	cell.changeYPosition(difference);
 	if (to.getYPosition() > from.getYPosition()) {
 		while (cell.getYPosition() < to.getYPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Rook can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Piece can't jump over it!\n");
 			cell.changeYPosition(difference);
 		}
 	}
 	else if (to.getYPosition() < from.getYPosition()) {
 		while (cell.getYPosition() > to.getYPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Rook can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Piece can't jump over it!\n");
 			cell.changeYPosition(difference);
 		}
 	}
@@ -44,13 +44,13 @@ void Rook::checkHorizontalPath(const Game& game, const Position& from, const Pos
 	cell.changeXPosition(difference);
 	if (to.getXPosition() > from.getXPosition()) {
 		while (cell.getXPosition() < to.getXPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Queen can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Piece can't jump over it!\n");
 			cell.changeXPosition(difference);
 		}
 	}
 	else if (to.getXPosition() < from.getXPosition()) {
 		while (cell.getXPosition() > to.getXPosition()) {
-			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Queen can't jump over it!\n");
+			if (!game.getBoard().getCell(cell).isEmpty()) throw std::logic_error("There is another piece on horizontal path! Piece can't jump over it!\n");
 			cell.changeXPosition(difference);
 		}
 	}

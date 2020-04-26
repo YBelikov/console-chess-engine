@@ -13,6 +13,8 @@ public:
 	void makePromotionForPawnAtPosition(const Position&, const Position&);
 	Board& getBoard() const { return *board; }
 	std::pair<Position, Position> getLastMoveFromStory() const;
+	
+
 private:
 	std::unique_ptr<Board> board;
 	std::vector<std::pair<Position, Position>> movesStory;
@@ -24,4 +26,6 @@ private:
 	void checkBetweenCells(const Position&, const Position&);
 	void checkDoesNextCellOcupiedByPieceOfSameColor(const Position&, const Position&);
 	void addMoveToStory(Position&, Position&);
+	void checkDiagonalInSomeDirection(const Position&, const Position&, int, int);
+	
 };
