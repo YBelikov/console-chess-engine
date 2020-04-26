@@ -15,6 +15,9 @@ public:
 	Board& getBoard() const { return *board; }
 	std::pair<Position, Position> getLastMoveFromStory() const;
 	bool checkDiagonalPath(const Position&, const Position&);
+	bool checkVerticalPath(const Position&, const Position&);
+	bool checkHorizontalPath(const Position&, const Position&);
+
 
 private:
 
@@ -30,7 +33,7 @@ private:
 	void addMoveToStory(Position&, Position&);
 	
 	bool checkDiagonalInSomeDirection(const Position&, const Position&, int, int);
-
+	
 	Position findKingPosition(Color&);
 	bool doesCellUnderAttack(const Position&);
 	

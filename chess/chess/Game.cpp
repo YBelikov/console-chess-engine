@@ -84,6 +84,45 @@ void Game::checkMove(const Position& from, const Position& to) {
 	}
 }
 
+bool Game::checkHorizontalPath(const Position& from, const Position& to) {
+	Position cell = from;
+	int difference = to.getXPosition() > from.getXPosition() ? 1 : -1;
+	cell.changeXPosition(difference);
+	if (to.getXPosition() > from.getXPosition()) {
+		while (cell.getXPosition() < to.getXPosition()) {
+			if (!board->getCell(cell).isEmpty()) return true;
+			cell.changeXPosition(difference);
+		}
+	}
+	else if (to.getXPosition() < from.getXPosition()) {
+		while (cell.getXPosition() > to.getXPosition()) {
+			if (!board->getCell(cell).isEmpty()) return true;
+			cell.changeXPosition(difference);
+		}
+	}
+	return false;
+}
+
+bool Game::checkVerticalPath(const Position& from, const Position& to) {
+	Position cell = from;
+	int difference = to.getYPosition() > from.getYPosition() ? 1 : -1;
+	cell.changeYPosition(difference);
+	if (to.getYPosition() > from.getYPosition()) {
+		while (cell.getYPosition() < to.getYPosition()) {
+			if (!board->getCell(cell).isEmpty()) return true;
+			cell.changeYPosition(difference);
+		}
+	}
+	else if (to.getYPosition() < from.getYPosition()) {
+		while (cell.getYPosition() > to.getYPosition()) {
+			if (!board->getCell(cell).isEmpty()) return true;
+			cell.changeYPosition(difference);
+		}
+	}
+	return false;
+}
+
+
 
 bool Game::checkDiagonalPath(const Position& from, const Position& to) {
 	if (to.getXPosition() > from.getXPosition() && to.getYPosition() < from.getYPosition()) {
