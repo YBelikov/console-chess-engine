@@ -16,7 +16,9 @@ Game::Game() {
 	writer = std::make_unique<Writer>();
 	createCastlingsTable();
 	gameStopped = false;
-	gameSaved = false;
+	gameSaved = true;
+	numberOfAttackers = 0;
+	turnCounter = 1;
 }
 
 
@@ -34,9 +36,9 @@ void Game::initializeBoard() {
 
 void Game::start() {
 	initializeBoard();
-	const std::regex allowedCommandsRegex("[qslm]");
+	const std::regex allowedCommandsRegex("[qslrm]");
 	char commandChar;
-	int turnCounter{1};
+	
 	do {
 		if (turnCounter % 2 == 0) turnColor = Color::Black;
 		else turnColor = Color::White;
@@ -49,7 +51,7 @@ void Game::start() {
 			}
 			else showMessageAboutCheck();
 		}
-		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove: ";
+		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove, (R)estart: ";
 		cin >> commandChar;
 		std::tolower(commandChar);
 		if (!std::regex_match(string{ commandChar }, allowedCommandsRegex)) {
@@ -61,6 +63,7 @@ void Game::start() {
 				if (!gameStopped) {
 					processMoveCommand();
 					gameSaved = false;
+					++turnCounter;
 					break;
 				}
 				cout << "Game stopped! You can't make moves anymore!\n";
@@ -68,9 +71,11 @@ void Game::start() {
 			case 's':
 				processSaveCommand();
 				break;
+			case 'r':
+				processRestartCommand();
+				break;
 			}
 		}
-		++turnCounter;
 	} while (commandChar != 'q');
 	
 }
@@ -415,4 +420,38 @@ void Game::processSaveCommand() {
 		cout << "Try again!\n";
 		processSaveCommand();
 	}
+}
+
+void Game::processRestartCommand() {
+	if (!gameSaved) {
+		cout << "This game isn't saved! All progress would be dropped! Would you like to save the game?(Y | N)\n";
+		char answer;
+		cin >> answer;
+		std::tolower(answer);
+		if (answer == 'y') {
+			processSaveCommand();
+			restart();
+		}
+		else if (answer == 'n') {
+			restart();
+		}
+		else {
+			cout << "Hmmm...You have only 2 options to choose! Try again!\n";
+			processRestartCommand();
+		}
+	}
+	restart();
+}
+
+void Game::restart() {
+	board->clear();
+	board->intitalize();
+
+	createCastlingsTable();
+	gameStopped = false;
+	gameSaved = true;
+	numberOfAttackers = 0;
+	turnCounter = 1;
+	movesStory.clear();
+	attackersPositions.clear();
 }

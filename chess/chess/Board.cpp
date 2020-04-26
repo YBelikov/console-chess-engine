@@ -117,6 +117,13 @@ void Board::setNewPiece(char pieceChar, const Position& to, const Color& col) {
 	}
 }
 
+void Board::clear() {
+	for (auto& row : pieces) {
+		for (auto& cell : row) {
+			if(!cell.isEmpty())	cell.releasePiece();
+		}
+	}
+}
 
 
 

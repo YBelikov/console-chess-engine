@@ -30,6 +30,9 @@ private:
 
 	std::unique_ptr<Board> board;
 	std::vector<std::pair<Position, Position>> movesStory;
+	std::vector<Position> attackersPositions;
+	int numberOfAttackers;
+
 	std::unique_ptr<Writer> writer;
 	Display displayer;
 	Color turnColor;
@@ -37,6 +40,7 @@ private:
 	std::map<Color, bool> queenSideCastlingsApplied;
 	bool gameStopped;
 	bool gameSaved;
+	int turnCounter;
 
 	void initializeBoard();
 	void checkMove(const Position&, const Position&);
@@ -65,5 +69,5 @@ private:
 	void showMessageAboutCheck();
 
 	void processSaveCommand();
-
+	void processRestartCommand();
 };

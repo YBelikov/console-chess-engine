@@ -16,7 +16,7 @@ public:
 	int size() const noexcept { return pieces.size(); }
 	Cell& getCell(const Position& pos) { return pieces[pos.getYPosition()][pos.getXPosition()]; }
 	void setNewPiece(char, const Position&, const Color&);
-
+	void clear();
 private:
 	void createWhitePawns();
 	void createWhiteHeavyPieces();
@@ -34,6 +34,8 @@ private:
 	void createBlackBishops();
 	void createBlackKing();
 	void createBlackQueen();
+
+	
 
 	std::vector<std::vector<Cell>> pieces;
 };

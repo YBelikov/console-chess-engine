@@ -13,8 +13,8 @@ void Writer::writeBoardTo(Game& game, std::string& str) {
 	if (!out) {
 		throw std::domain_error("Can't create a file!\n");
 	}
-	if (game.getCurrentTurn() == Color::White) out << 1;
-	else if (game.getCurrentTurn() == Color::Black) out << 2;
+	if (game.getCurrentTurn() == Color::White) out << 1 << '\n';
+	else if (game.getCurrentTurn() == Color::Black) out << 2 << '\n';
 	for (auto& row : game.getBoard()) {
 		for (auto& cell : row) {
 			if (!cell.isEmpty()) {
