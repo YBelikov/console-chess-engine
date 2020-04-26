@@ -1,0 +1,9 @@
+2
+br0 bn1 bb2 bq3 bk4 bb5 bn6 br7 
+bp0 bp1 bp2 bp3 bp4 bp5 bp6 bp7 
+
+
+wp0 
+
+wp49 wp50 wp51 wp52 wp53 wp54 wp55 
+wr56 wn57 wb58 wq59 wk60 wb61 wn62 wr63 

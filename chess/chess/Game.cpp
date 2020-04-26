@@ -74,6 +74,9 @@ void Game::start() {
 			case 'r':
 				processRestartCommand();
 				break;
+			case 'l':
+				processLoadCommand();
+				break;
 			}
 		}
 	} while (commandChar != 'q');
@@ -81,28 +84,31 @@ void Game::start() {
 }
 
 void Game::processMoveCommand() {
-	const std::regex moveRegex("[a-h][1-8]-[a-h][1-8]");
+	cout << "Now type move in format a1-b1: ";
 	string moveCommand{};
 	cin >> moveCommand;
+	try {
+		validateMoveCommand(moveCommand);
+		Position from(board->size() - (moveCommand[1] - '0'), int(moveCommand[0]) - int('a'));
+		Position to(board->size() - (moveCommand[4] - '0'), int(moveCommand[3]) - int('a'));
+		checkMove(from, to);
+		makeMove(from, to);
+		addMoveToStory(from, to);
+	}
+	catch (std::logic_error& er) {
+		cout << er.what();
+		cout << "Try again!\n";
+		processMoveCommand();
+	}
+	
+}
+
+void Game::validateMoveCommand(string& moveCommand) {
+	const std::regex moveRegex("[a-h][1-8]-[a-h][1-8]");
 	for (auto& c : moveCommand) {
 		std::tolower(c);
 	}
-	if (!std::regex_match(moveCommand, moveRegex)) {
-		cout << "Wrong format of move\n";
-	}
-	else {
-		Position from(board->size() -  (moveCommand[1] - '0'), int(moveCommand[0]) - int('a'));
-		Position to(board->size() - (moveCommand[4] - '0'), int(moveCommand[3]) - int('a'));
-		try {
-			checkMove(from, to);
-			makeMove(from, to);
-			addMoveToStory(from, to);
-			
-		}catch(logic_error& ex){
-			cout << ex.what();
-			processMoveCommand();
-		}
-	}
+	if (!std::regex_match(moveCommand, moveRegex)) throw std::logic_error("Wrong format of move!\n");
 
 }
 
@@ -446,7 +452,6 @@ void Game::processRestartCommand() {
 void Game::restart() {
 	board->clear();
 	board->intitalize();
-
 	createCastlingsTable();
 	gameStopped = false;
 	gameSaved = true;
@@ -454,4 +459,13 @@ void Game::restart() {
 	turnCounter = 1;
 	movesStory.clear();
 	attackersPositions.clear();
+}
+
+void Game::processLoadCommand() {
+	cout << "Type name of file(without extension) from which you want to load game: ";
+	string fileName{};
+	cin >> fileName;
+	fileName += ".txt";
+	loader = std::make_unique<Loader>();
+	//loader->load(*this, fileName);
 }

@@ -128,6 +128,7 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Loader.h" />
     <ClInclude Include="PieceType.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="King.h" />

@@ -3,6 +3,7 @@
 #include "Board.h"
 #include "Display.h"
 #include "Writer.h"
+#include "Loader.h"
 #include <vector>
 
 enum class Side { QueenSide, KingSide };
@@ -29,6 +30,7 @@ public:
 private:
 
 	std::unique_ptr<Board> board;
+	std::unique_ptr<Loader> loader;
 	std::vector<std::pair<Position, Position>> movesStory;
 	std::vector<Position> attackersPositions;
 	int numberOfAttackers;
@@ -43,6 +45,7 @@ private:
 	int turnCounter;
 
 	void initializeBoard();
+	void validateMoveCommand(std::string&);
 	void checkMove(const Position&, const Position&);
 	void makeMove(const Position&, const Position&);
 	void checkBetweenCells(const Position&, const Position&);
@@ -67,7 +70,8 @@ private:
 	bool checkMate();
 	void showWinningMessage();
 	void showMessageAboutCheck();
-
+	
 	void processSaveCommand();
 	void processRestartCommand();
+	void processLoadCommand();
 };
