@@ -13,8 +13,16 @@ using std::logic_error;
 
 Game::Game() {
 	board = std::make_unique<Board>(8);
+	createCastlingsTable();
 }
 
+
+void Game::createCastlingsTable() {
+	kingSideCastlingsApplied[Color::White] = false;
+	kingSideCastlingsApplied[Color::Black] = false;
+	queenSideCastlingsApplied[Color::White] = false;
+	queenSideCastlingsApplied[Color::Black] = false;
+}
 
 
 void Game::initializeBoard() {
@@ -53,6 +61,9 @@ void Game::processMoveCommand() {
 	const std::regex moveRegex("[a-h][1-8]-[a-h][1-8]");
 	string moveCommand{};
 	cin >> moveCommand;
+	for (auto& c : moveCommand) {
+		std::tolower(c);
+	}
 	if (!std::regex_match(moveCommand, moveRegex)) {
 		cout << "Wrong format of move\n";
 	}
@@ -313,4 +324,34 @@ bool Game::wouldKingBeInCheck(const Position& from, const Position& to) {
 	}
 	makeMove(to, from);
 	return false;
+}
+
+bool Game::doesCastlingApplied(Side side) {
+	if (side == Side::KingSide) {
+		return kingSideCastlingsApplied[turnColor];
+	}
+	else {
+		return queenSideCastlingsApplied[turnColor];
+	}
+}
+
+void Game::disallowCastling() {
+	kingSideCastlingsApplied[turnColor] = true;
+	queenSideCastlingsApplied[turnColor] = true;
+}
+
+void Game::disallowCastlingForOneSide(Side side) {
+	if (side == Side::KingSide) kingSideCastlingsApplied[turnColor] = true;
+	else if (side == Side::QueenSide) queenSideCastlingsApplied[turnColor] = true;
+}
+
+void Game::applyCastling(const Position& from, const Position& to) {
+	if (from.getXPosition() < to.getXPosition()) {
+		Position kingSideRookPosition(to.getYPosition(), board->size() - 1);
+		makeMove(kingSideRookPosition, Position(to.getYPosition(), to.getXPosition() - 1));
+	}
+	else {
+		Position queenSideRookPosition(to.getYPosition(), 0);
+		makeMove(queenSideRookPosition, Position(to.getYPosition(), to.getXPosition() + 1));
+	}
 }

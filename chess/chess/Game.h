@@ -3,7 +3,7 @@
 #include "Board.h"
 #include "Display.h"
 #include <vector>
-
+enum class Side { QueenSide, KingSide };
 class Game {
 public:
 	Game();
@@ -14,10 +14,15 @@ public:
 	bool doesKingInCheck();
 	Board& getBoard() const { return *board; }
 	std::pair<Position, Position> getLastMoveFromStory() const;
+
 	bool checkDiagonalPath(const Position&, const Position&);
 	bool checkVerticalPath(const Position&, const Position&);
 	bool checkHorizontalPath(const Position&, const Position&);
 	bool doesCellUnderAttack(const Position&);
+	bool doesCastlingApplied(Side side);
+	void disallowCastling();
+	void disallowCastlingForOneSide(Side side);
+	void applyCastling(const Position&, const Position&);
 
 private:
 
@@ -25,13 +30,16 @@ private:
 	std::vector<std::pair<Position, Position>> movesStory;
 	Display displayer;
 	Color turnColor;
+	std::map<Color, bool> kingSideCastlingsApplied;
+	std::map<Color, bool> queenSideCastlingsApplied;
 	void initializeBoard();
 	void checkMove(const Position&, const Position&);
 	void makeMove(const Position&, const Position&);
 	void checkBetweenCells(const Position&, const Position&);
 	void checkDoesNextCellOcupiedByPieceOfSameColor(const Position&, const Position&);
 	void addMoveToStory(Position&, Position&);
-	
+	void createCastlingsTable();
+
 	bool wouldKingBeInCheck(const Position&, const Position&);
 
 	bool checkDiagonalInSomeDirection(const Position&, const Position&, int, int);

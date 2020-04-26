@@ -11,7 +11,7 @@ protected:
 	PieceType type;
 	Color color;
 public:
-	Piece(PieceType type_, Color color_, bool killed_ = false) : type(type_), color(color_), killed(killed_) {}
+	Piece(PieceType type_, Color color_) : type(type_), color(color_) {}
 	PieceType getPieceType() const noexcept { return type; }
 	Color getColorOfPiece() const noexcept { return color; }
 	virtual void canMove(Game& , const Position&, const Position&) {};
