@@ -25,7 +25,10 @@ void Game::start() {
 	initializeBoard();
 	const std::regex allowedCommandsRegex("[qslm]");
 	char commandChar;
+	int turnCounter{1};
 	do {
+		if (turnCounter % 2 == 0) turn = Color::Black;
+		else turn = Color::White;
 		system("cls");
 		displayer.display(*board, cout);
 		cout << "Now you can use next options in game: (Q)uit, (S)ave, (L)oad, (M)ove: ";
@@ -41,6 +44,7 @@ void Game::start() {
 				break;
 			}
 		}
+		++turnCounter;
 	} while (commandChar != 'q');
 	
 }
@@ -71,6 +75,7 @@ void Game::processMoveCommand() {
 void Game::checkMove(const Position& from, const Position& to) {
 	try {
 		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
+		if (board->getCell(from).getPiece().getColorOfPiece() != turn) throw logic_error("You're trying to move opponent's piece!\n");
 		checkDoesNextCellOcupiedByPieceOfSameColor(from, to);
 		board->getCell(from).getPiece().canMove(*this, from, to);
 	}

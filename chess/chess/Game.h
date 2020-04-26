@@ -16,10 +16,11 @@ public:
 	
 
 private:
+
 	std::unique_ptr<Board> board;
 	std::vector<std::pair<Position, Position>> movesStory;
 	Display displayer;
-
+	Color turn;
 	void initializeBoard();
 	void checkMove(const Position&, const Position&);
 	void makeMove(const Position&, const Position&);
