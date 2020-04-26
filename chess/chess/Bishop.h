@@ -3,7 +3,7 @@
 
 class Bishop : public Piece {
 private:
-	void checkDiagonalInSomeDirection(Game&, const Position&, const Position&, int, int);
+	/*void checkDiagonalInSomeDirection(Game&, const Position&, const Position&, int, int);*/
 public:
 	Bishop() = default;
 	~Bishop() = default;

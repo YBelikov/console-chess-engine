@@ -15,9 +15,7 @@ public:
 	Cell(Position, std::unique_ptr<Piece>);
 	void setPiece(std::unique_ptr<Piece>);
 	Piece& getPiece();
-	std::unique_ptr<Piece> releasePiece() {
-		std::cout << "Release\n";
-		return std::move(piece); 
-	}
+	std::unique_ptr<Piece> releasePiece() {	return std::move(piece); }
+	Position getPosition() const { return position; }
 	bool isEmpty();
 };
