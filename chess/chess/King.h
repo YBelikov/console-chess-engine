@@ -6,5 +6,5 @@ public:
 	King() = default;
 	~King() = default;
 	King(Color);
-	void canMove(Game&, const Position&, const Position&) override;
+	bool canMove(Game&, const Position&, const Position&) override;
 };
