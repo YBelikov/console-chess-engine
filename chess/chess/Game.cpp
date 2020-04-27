@@ -117,7 +117,8 @@ void Game::checkMove(const Position& from, const Position& to) {
 		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
 		if (board->getCell(from).getPiece().getColorOfPiece() != turnColor) throw logic_error("You're trying to move opponent's piece!\n");
 		checkDoesNextCellOcupiedByPieceOfSameColor(from, to);
-		if(!board->getCell(from).getPiece().canMove(*this, from, to)) throw logic_error("Piece can't make this move!\n");
+		if(!board->getCell(from).getPiece().canMove(*this, from, to) || board->getCell(to).getPiece().getPieceType() == PieceType::King) throw logic_error("Piece can't make this move!\n");
+		
 		if (wouldKingBeInCheck(from, to)) throw logic_error("King would be in check after this move! Can't move the piece!\n");
 	}
 	catch (logic_error & ex) {
