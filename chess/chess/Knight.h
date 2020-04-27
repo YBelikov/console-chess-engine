@@ -7,5 +7,5 @@ public:
 	Knight() = default;
 	Knight(Color);
 	~Knight() = default;
-	void canMove(Game&, const Position&, const Position&) override;
+	bool canMove(Game&, const Position&, const Position&) override;
 };
