@@ -6,27 +6,31 @@
 using std::logic_error;
 
 bool Pawn::canMove(Game& game, const Position& from, const Position& to) {
+
 	if (from.getXPosition() == to.getXPosition()) {
 		if ((color == Color::White && to.getYPosition() == from.getYPosition() - 1) ||
 			(color == Color::Black && to.getYPosition() == from.getYPosition() + 1)) {
 			return true;
 		}
 		else if ((color == Color::White && to.getYPosition() == from.getYPosition() - 2) ||
-			(color == Color::Black && to.getYPosition() == from.getYPosition() + 2) ) {
+			(color == Color::Black && to.getYPosition() == from.getYPosition() + 2)) {
 			return checkDoubleMove(game, from, to);
 		}
 		else {
 			return false;
 		}
-	}
-	else if (color == Color::White && from.getYPosition() == 3 && to.getYPosition() == 2 && abs(from.getXPosition() - to.getXPosition()) == 1 ||
-		color == Color::Black && from.getYPosition() == 4 && to.getYPosition() == 5 && abs(from.getXPosition() - to.getXPosition()) == 1) {
+	}else if (color == Color::White && from.getYPosition() == 3 && to.getYPosition() == 2 && abs(from.getYPosition() - to.getYPosition()) == 1 && abs(from.getXPosition() - to.getXPosition()) == 1 ||
+		color == Color::Black && from.getYPosition() == 4 && to.getYPosition() == 5 && abs(from.getYPosition() - to.getYPosition()) == 1 && abs(from.getXPosition() - to.getXPosition()) == 1) {
+		bool isValid = true;
 		auto lastMove = game.getLastMoveFromStory();
-		if (!checkForEnpassant(game, from, to, lastMove)) return false;
-		game.getBoard().getCell(lastMove.second).releasePiece();
-	}
-	else if(abs(to.getYPosition() - from.getYPosition()) == 1) {
-		return checkForCapturing(game, from, to);
+		if (!checkForEnpassant(game, from, to, lastMove)) isValid = false;
+		if(isValid) game.getBoard().getCell(lastMove.second).releasePiece();
+		else {
+			if (abs(to.getXPosition() - from.getXPosition()) == 1) {
+				isValid = checkForCapturing(game, from, to);
+			}
+		}
+		return isValid;
 	}
 	else {
 		return false;
@@ -62,7 +66,7 @@ bool Pawn::checkBlackDoubleMove(Game& game, const Position& from, const Position
 bool Pawn::checkForCapturing(Game& game, const Position& from, const Position& to) {
 	if ((color == Color::White && to.getYPosition() == from.getYPosition() - 1) ||
 		(color == Color::Black && to.getYPosition() == from.getYPosition() + 1)) {
-		if (game.getBoard().getCell(to).isEmpty()) {
+		if (game.getBoard().getCell(to).isEmpty() || game.getBoard().getCell(to).getPiece().getPieceType() == PieceType::King) {
 			return false;
 		}
 	}
@@ -78,6 +82,6 @@ void Pawn::checkForPromotion(Game& game, const Position& from, const Position& t
 bool Pawn::checkForEnpassant(Game& game, const Position& from, const Position& to, std::pair<Position, Position>& lastMove) {
 	auto lastPosition = lastMove.second;
 	if (game.getBoard().getCell(lastPosition).getPiece().getPieceType() != PieceType::Pawn) return false;
-	if (!(abs(lastMove.first.getYPosition() - lastMove.second.getYPosition()) == 2 && abs(from.getXPosition() - lastPosition.getXPosition()) == 1))
+	if (!(abs(lastMove.first.getYPosition() - lastMove.second.getYPosition()) == 2 && abs(from.getXPosition() - lastPosition.getXPosition()) == 1 && abs(to.getYPosition() - lastPosition.getYPosition()) == 1))
 		return false;
 }
