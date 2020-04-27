@@ -315,6 +315,12 @@ bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset,
 		if (!board->getCell(current).isEmpty()) {
 			if (board->getCell(current).getPiece().getColorOfPiece() == color) break;
 			else {
+				if (abs(start.getXPosition() - current.getXPosition()) == 1
+					&& abs(start.getYPosition() - current.getYPosition()) == 1
+					&& board->getCell(current).getPiece().getPieceType() == PieceType::Pawn) {
+					attackersPositions.push_back(Position(current));
+					return true;
+				}
 				if (board->getCell(current).getPiece().getPieceType() == PieceType::Bishop ||
 					board->getCell(current).getPiece().getPieceType() == PieceType::Queen) {
 					attackersPositions.push_back(Position(current));
