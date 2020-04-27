@@ -20,6 +20,7 @@ public:
 private:
 	void createWhitePawns();
 	void createWhiteHeavyPieces();
+	void createCellsWithoutPieces();
 	void createBlackPawns();
 	void createBlackHeavyPieces();
 

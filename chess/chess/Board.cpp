@@ -18,6 +18,7 @@ Board::Board(int size) {
 void Board::intitalize() {
 	createWhitePawns();
 	createWhiteHeavyPieces();
+	createCellsWithoutPieces();
 	createBlackPawns();
 	createBlackHeavyPieces();
 }
@@ -28,6 +29,13 @@ void Board::createWhitePawns() {
 	}
 }
 
+void Board::createCellsWithoutPieces() {
+	for (int i = 2; i < pieces.size() - 2; ++i) {
+		for (int j = 0; j < pieces.size(); ++j) {
+			pieces[i][j] = Cell(Position(i, j));
+		}
+	}
+}
 
 void Board::createWhiteHeavyPieces() {
 	createWhiteRooks();
@@ -64,7 +72,7 @@ void Board::createWhiteKing() {
 
 void Board::createBlackPawns() {
 	for (int i = 0; i < pieces.size(); ++i) {
-		pieces[1][i] = Cell(Position(0, i), std::make_unique<Pawn>(Color::Black));
+		pieces[1][i] = Cell(Position(1, i), std::make_unique<Pawn>(Color::Black));
 	}
 }
 

@@ -463,10 +463,17 @@ void Game::restart() {
 }
 
 void Game::processLoadCommand() {
-	cout << "Type name of file(without extension) from which you want to load game: ";
-	string fileName{};
-	cin >> fileName;
-	fileName += ".txt";
-	loader = std::make_unique<Loader>();
-	//loader->load(*this, fileName);
+	try {
+		cout << "Type name of file(without extension) from which you want to load game: ";
+		string fileName{};
+		cin >> fileName;
+		fileName += ".txt";
+		loader = std::make_unique<Loader>();
+		loader->load(*this, fileName);
+		turnCounter = loader->getTurn();
+	}
+	catch (std::domain_error & er) {
+		cout << er.what();
+		processLoadCommand();
+	}
 }

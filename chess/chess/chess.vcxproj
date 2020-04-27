@@ -129,6 +129,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="PieceType.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="King.h" />
@@ -147,7 +148,9 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Queen.cpp" />

@@ -13,6 +13,7 @@ private:
 public:
 	Cell() = default;
 	Cell(Position, std::unique_ptr<Piece>);
+	Cell(Position);
 	void setPiece(std::unique_ptr<Piece>);
 	Piece& getPiece();
 	std::unique_ptr<Piece> releasePiece() {	return std::move(piece); }

@@ -19,7 +19,7 @@ void Writer::writeBoardTo(Game& game, std::string& str) {
 		for (auto& cell : row) {
 			if (!cell.isEmpty()) {
 				out << colorMap[cell.getPiece().getColorOfPiece()] << piecesMap[cell.getPiece().getPieceType()]
-					<< cell.getPosition().getYPosition() * game.getBoard().size() + cell.getPosition().getXPosition() << " ";
+					<< cell.getPosition().getYPosition() << cell.getPosition().getXPosition() << " ";
 			}
 		}
 		out << '\n';

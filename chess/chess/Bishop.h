@@ -1,9 +1,7 @@
 #pragma once
 #include "Piece.h"
 
-class Bishop : public Piece {
-private:
-	/*void checkDiagonalInSomeDirection(Game&, const Position&, const Position&, int, int);*/
+class Bishop : public Piece {	
 public:
 	Bishop() = default;
 	~Bishop() = default;
