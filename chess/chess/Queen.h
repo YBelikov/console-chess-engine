@@ -7,5 +7,5 @@ public:
 	Queen() = default;
 	~Queen() = default;
 	Queen(Color);
-	void canMove(Game&, const Position&, const Position&) override;
+	bool canMove(Game&, const Position&, const Position&) override;
 };
