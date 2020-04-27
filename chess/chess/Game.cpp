@@ -117,7 +117,7 @@ void Game::checkMove(const Position& from, const Position& to) {
 		if (board->getCell(from).isEmpty()) throw logic_error("The starting cell is empty\n");
 		if (board->getCell(from).getPiece().getColorOfPiece() != turnColor) throw logic_error("You're trying to move opponent's piece!\n");
 		checkDoesNextCellOcupiedByPieceOfSameColor(from, to);
-		board->getCell(from).getPiece().canMove(*this, from, to);
+		if(!board->getCell(from).getPiece().canMove(*this, from, to)) throw logic_error("Piece can't make this move!\n");
 		if (wouldKingBeInCheck(from, to)) throw logic_error("King would be in check after this move! Can't move the piece!\n");
 	}
 	catch (logic_error & ex) {
@@ -235,7 +235,7 @@ std::pair<Position, Position> Game::getLastMoveFromStory() const {
 
 bool Game::doesKingInCheck() {
 	Position kingPosition = findKingPosition(turnColor);
-	return doesCellUnderAttack(kingPosition);
+	return doesCellUnderAttack(kingPosition, turnColor);
 }
 
 Position Game::findKingPosition(Color& turnColor) {
@@ -248,36 +248,37 @@ Position Game::findKingPosition(Color& turnColor) {
 			}
 		}
 	}
-	throw std::logic_error("Something with your king!\n");
+	throw std::logic_error("Something wrong with your king!\n");
 }
 
-bool Game::doesCellUnderAttack(const Position& pos) {
-	return checkHorizontalAttackers(pos) || checkVerticalAttackers(pos) 
-		|| checkDiagonalAttackers(pos) || checkLShapedAttackers(pos);
+bool Game::doesCellUnderAttack(const Position& pos, Color color) {
+	return checkHorizontalAttackers(pos, color) || checkVerticalAttackers(pos, color) 
+		|| checkDiagonalAttackers(pos, color) || checkLShapedAttackers(pos, color);
 }
 
-bool Game::checkHorizontalAttackers(const Position& pos) {
-	return checkHorizontalEnemies(pos, 1) || checkHorizontalEnemies(pos, -1);
+bool Game::checkHorizontalAttackers(const Position& pos, Color color) {
+	return checkHorizontalEnemies(pos, 1, color) || checkHorizontalEnemies(pos, -1, color);
 }
 
-bool Game::checkVerticalAttackers(const Position& pos) {
-	return checkVerticalEnemies(pos, 1) || checkVerticalEnemies(pos, -1);
+bool Game::checkVerticalAttackers(const Position& pos, Color color) {
+	return checkVerticalEnemies(pos, 1, color) || checkVerticalEnemies(pos, -1, color);
 }
 
-bool Game::checkDiagonalAttackers(const Position& pos){
-	return checkDiagonalEnemies(pos, 1, 1) || checkDiagonalEnemies(pos, -1, 1) 
-	|| checkDiagonalEnemies(pos, 1, -1) || checkDiagonalEnemies(pos, -1, -1);
+bool Game::checkDiagonalAttackers(const Position& pos, Color color){
+	return checkDiagonalEnemies(pos, 1, 1, color) || checkDiagonalEnemies(pos, -1, 1, color) 
+	|| checkDiagonalEnemies(pos, 1, -1, color) || checkDiagonalEnemies(pos, -1, -1, color);
 }
 
-bool Game::checkHorizontalEnemies(const Position& start, int xOffset) {
+bool Game::checkHorizontalEnemies(const Position& start, int xOffset, Color color) {
 	Position current = start;
 	current.changeXPosition(xOffset);
 	while (current.getXPosition() < board->size() && current.getXPosition() >= 0) {
 		if (!board->getCell(current).isEmpty()) {
-			if (board->getCell(current).getPiece().getColorOfPiece() == turnColor) break;
+			if (board->getCell(current).getPiece().getColorOfPiece() == color) break;
 			else {
 				if (board->getCell(current).getPiece().getPieceType() == PieceType::Queen ||
 					board->getCell(current).getPiece().getPieceType() == PieceType::Rook) {
+					attackersPositions.push_back(Position(current));
 					return true;
 				}
 			}
@@ -287,15 +288,16 @@ bool Game::checkHorizontalEnemies(const Position& start, int xOffset) {
 	return false;
 }
 
-bool Game::checkVerticalEnemies(const Position& start, int yOffset) {
+bool Game::checkVerticalEnemies(const Position& start, int yOffset, Color color) {
 	Position current = start; 
 	current.changeYPosition(yOffset);
 	while (current.getYPosition() < board->size() && current.getYPosition() >= 0) {	
 		if (!board->getCell(current).isEmpty()) {
-			if (board->getCell(current).getPiece().getColorOfPiece() == turnColor) break;
+			if (board->getCell(current).getPiece().getColorOfPiece() == color) break;
 			else {
 				if (board->getCell(current).getPiece().getPieceType() == PieceType::Queen ||
 					board->getCell(current).getPiece().getPieceType() == PieceType::Rook) {
+					attackersPositions.push_back(Position(current));
 					return true;
 				}
 			}
@@ -305,17 +307,18 @@ bool Game::checkVerticalEnemies(const Position& start, int yOffset) {
 	return false;
 }
 
-bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset) {
+bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset, Color color) {
 	Position current = start;
 	current.changeXPosition(xOffset);
 	current.changeYPosition(yOffset);
 	while (current.getXPosition() < board->size() && current.getXPosition() >= 0
 		&& current.getYPosition() < board->size() && current.getYPosition() >= 0) {
 		if (!board->getCell(current).isEmpty()) {
-			if (board->getCell(current).getPiece().getColorOfPiece() == turnColor) break;
+			if (board->getCell(current).getPiece().getColorOfPiece() == color) break;
 			else {
 				if (board->getCell(current).getPiece().getPieceType() == PieceType::Bishop ||
 					board->getCell(current).getPiece().getPieceType() == PieceType::Queen) {
+					attackersPositions.push_back(Position(current));
 					return true;
 				}
 			}
@@ -326,7 +329,7 @@ bool Game::checkDiagonalEnemies(const Position& start, int xOffset, int yOffset)
 	return false;
 }
 
-bool Game::checkLShapedAttackers(const Position& pos) {
+bool Game::checkLShapedAttackers(const Position& pos, Color color) {
 	std::vector<Position> knightMoves = { Position(1, 2), Position(-1, 2), Position(1, -2), Position(-1, -2),
 										Position(2, 1), Position(2, -1), Position(-2, 1), Position(-2, -1) };
 	Position possibleEnemyPosition = pos;
@@ -336,8 +339,9 @@ bool Game::checkLShapedAttackers(const Position& pos) {
 		if (possibleEnemyPosition.getXPosition() < board->size() && possibleEnemyPosition.getXPosition() > 0
 			&& possibleEnemyPosition.getYPosition() < board->size() && possibleEnemyPosition.getYPosition() > 0) {
 			if (!board->getCell(possibleEnemyPosition).isEmpty()) {
-				if (board->getCell(possibleEnemyPosition).getPiece().getColorOfPiece() != turnColor
+				if (board->getCell(possibleEnemyPosition).getPiece().getColorOfPiece() != color
 					&& board->getCell(possibleEnemyPosition).getPiece().getPieceType() == PieceType::Knight) {
+					attackersPositions.push_back(Position(possibleEnemyPosition));
 					return true;
 				}
 			}
@@ -405,6 +409,130 @@ void Game::showWinningMessage() {
 }
 
 bool Game::checkMate(){
+	std::vector<Position> kingPossibleMoves = { Position(1, -1), Position(1, 1), Position(1, 0), Position(0, 1),
+												Position(-1, -1), Position(-1, 1), Position(-1, 0), Position(0, -1) };
+	Position currentKingPosition = findKingPosition(turnColor);
+	Position testPosition = currentKingPosition;
+	for (auto& move : kingPossibleMoves) {
+		testPosition.changeXPosition(move.getXPosition());
+		testPosition.changeYPosition(move.getYPosition());
+		if (testPosition.getXPosition() < 0 || testPosition.getXPosition() > board->size()
+			|| testPosition.getYPosition() < 0 || testPosition.getYPosition() > board->size()) continue;
+		if (!board->getCell(testPosition).isEmpty()) continue;
+		if (!wouldKingBeInCheck(currentKingPosition, testPosition)) return false;
+		testPosition = currentKingPosition;
+	}
+	if (attackersPositions.size() == 1) return doesCellUnderAttack(attackersPositions.front(), getOpponentColor());
+	if (!directionCanBeBlocked(currentKingPosition, attackersPositions.front())) return true;
+
+}
+
+Color Game::getOpponentColor() {
+	if (turnColor == Color::White) return Color::Black;
+	return Color::White;
+}
+
+bool Game::directionCanBeBlocked(const Position& from, const Position& to) {
+	PieceType type = board->getCell(to).getPiece().getPieceType();
+	if (type == PieceType::Knight) return false;
+	else if (type == PieceType::Pawn) return false;
+	else if (type == PieceType::Rook) {
+		if (from.getXPosition() == to.getXPosition() && from.getYPosition() == to.getYPosition()) {
+			return doesHorizontalCellsAreReachable(from, to);
+		}
+		else return doesVerticalCellsAreReachable(from, to);
+	}
+	else if (type == PieceType::Bishop) {
+		return doesDiagonalCellsAreReachable(from, to);
+	}
+	else if (type == PieceType::Queen) {
+		if (from.getXPosition() == to.getXPosition() && from.getYPosition() == to.getYPosition()) {
+			return doesHorizontalCellsAreReachable(from, to);
+		}
+		else if(from.getXPosition() != to.getXPosition() && from.getYPosition() == to.getYPosition())
+			return doesVerticalCellsAreReachable(from, to);
+		else if (abs(from.getXPosition() - to.getXPosition()) == abs(from.getYPosition() - to.getYPosition())) {
+			return doesDiagonalCellsAreReachable(from, to);
+		}
+	}
+	return true;
+}
+
+
+bool Game::doesHorizontalCellsAreReachable(const Position& from, const Position& to) {
+	Position cell = from;
+	int difference = to.getXPosition() > from.getXPosition() ? 1 : -1;
+	cell.changeXPosition(difference);
+	if (to.getXPosition() > from.getXPosition()) {
+		while (cell.getXPosition() < to.getXPosition()) {
+			if (!board->getCell(cell).isEmpty() && board->getCell(cell).getPiece().getColorOfPiece() == turnColor) {
+				if (board->getCell(cell).getPiece().canMove(*this, board->getCell(cell).getPosition(), cell)) return true;
+			}
+			cell.changeXPosition(difference);
+		}
+	}
+	else if (to.getXPosition() < from.getXPosition()) {
+		while (cell.getXPosition() > to.getXPosition()) {
+			if (!board->getCell(cell).isEmpty() && board->getCell(cell).getPiece().getColorOfPiece() == turnColor) {
+				if (board->getCell(cell).getPiece().canMove(*this, board->getCell(cell).getPosition(), cell)) return true;
+			}
+			cell.changeXPosition(difference);
+		}
+		return false;
+	}
+	return false;
+}
+
+
+bool Game::doesVerticalCellsAreReachable(const Position& from, const Position& to) {
+	Position cell = from;
+	int difference = to.getYPosition() > from.getYPosition() ? 1 : -1;
+	cell.changeYPosition(difference);
+	if (to.getYPosition() > from.getYPosition()) {
+		while (cell.getYPosition() < to.getYPosition()) {
+			if (!board->getCell(cell).isEmpty() && board->getCell(cell).getPiece().getColorOfPiece() == turnColor) {
+				if (board->getCell(cell).getPiece().canMove(*this, board->getCell(cell).getPosition(), cell)) return true;
+			}
+			cell.changeYPosition(difference);
+		}
+	}
+	else if (to.getYPosition() < from.getYPosition()) {
+		while (cell.getYPosition() > to.getYPosition()) {
+			if (!board->getCell(cell).isEmpty() && board->getCell(cell).getPiece().getColorOfPiece() == turnColor) {
+				if (board->getCell(cell).getPiece().canMove(*this, board->getCell(cell).getPosition(), cell)) return true;
+			}
+			cell.changeYPosition(difference);
+		}
+	}
+	return false;
+}
+
+bool Game::doesDiagonalCellsAreReachable(const Position& from, const Position& to) {
+	if (to.getXPosition() > from.getXPosition() && to.getYPosition() < from.getYPosition()) {
+		return checkDiagonalReachabilityInSomeDirection(from, to, 1, -1); //upper-right diagonal
+	}
+	else if (to.getXPosition() < from.getXPosition() && to.getYPosition() < from.getYPosition()) {
+		return checkDiagonalReachabilityInSomeDirection(from, to, -1, -1); //upper-left diagonal
+	}
+	else if (to.getXPosition() < from.getXPosition() && to.getYPosition() > from.getYPosition()) {
+		return checkDiagonalReachabilityInSomeDirection(from, to, -1, 1); //down-left diagonal
+	}
+	else if (to.getXPosition() > from.getXPosition() && to.getYPosition() > from.getYPosition()) {
+		return checkDiagonalReachabilityInSomeDirection(from, to, 1, 1); // down-right diagonal
+	}
+}
+
+bool Game::checkDiagonalReachabilityInSomeDirection(const Position& from, const Position& to, int xOffset, int yOffset) {
+	Position current = from;
+	current.changeXPosition(xOffset);
+	current.changeYPosition(yOffset);
+	while (current != to) {
+		if (!board->getCell(current).isEmpty() && board->getCell(current).getPiece().getColorOfPiece() == turnColor) {
+			if(board->getCell(current).getPiece().canMove(*this, board->getCell(current).getPosition(), current)) return true;
+		}
+		current.changeXPosition(xOffset);
+		current.changeYPosition(yOffset);
+	}
 	return false;
 }
 

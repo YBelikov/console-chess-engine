@@ -14,7 +14,7 @@ public:
 	Piece(PieceType type_, Color color_) : type(type_), color(color_) {}
 	PieceType getPieceType() const noexcept { return type; }
 	Color getColorOfPiece() const noexcept { return color; }
-	virtual void canMove(Game& , const Position&, const Position&) {};
+	virtual bool canMove(Game&, const Position&, const Position&) { return true; }
 	virtual ~Piece() {}
 	
 };

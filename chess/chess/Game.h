@@ -21,7 +21,7 @@ public:
 	bool checkDiagonalPath(const Position&, const Position&);
 	bool checkVerticalPath(const Position&, const Position&);
 	bool checkHorizontalPath(const Position&, const Position&);
-	bool doesCellUnderAttack(const Position&);
+	bool doesCellUnderAttack(const Position&, Color);
 	bool doesCastlingApplied(Side side);
 	void disallowCastling();
 	void disallowCastlingForOneSide(Side side);
@@ -58,14 +58,19 @@ private:
 	bool checkDiagonalInSomeDirection(const Position&, const Position&, int, int);
 	
 	Position findKingPosition(Color&);
-
-	bool checkHorizontalAttackers(const Position&);
-	bool checkVerticalAttackers(const Position&);
-	bool checkDiagonalAttackers(const Position&);
-	bool checkLShapedAttackers(const Position&);
-	bool checkHorizontalEnemies(const Position&, int);
-	bool checkVerticalEnemies(const Position&, int);
-	bool checkDiagonalEnemies(const Position&, int, int);
+	Color getOpponentColor();
+	bool checkHorizontalAttackers(const Position&, Color);
+	bool checkVerticalAttackers(const Position&, Color);
+	bool checkDiagonalAttackers(const Position&, Color);
+	bool checkLShapedAttackers(const Position&, Color);
+	bool checkHorizontalEnemies(const Position&, int, Color);
+	bool checkVerticalEnemies(const Position&, int, Color);
+	bool checkDiagonalEnemies(const Position&, int, int, Color);
+	bool directionCanBeBlocked(const Position&, const Position&);
+	bool doesVerticalCellsAreReachable(const Position&, const Position&);
+	bool doesHorizontalCellsAreReachable(const Position&, const Position&);
+	bool doesDiagonalCellsAreReachable(const Position&, const Position&);
+	bool checkDiagonalReachabilityInSomeDirection(const Position&, const Position&, int, int);
 
 	bool checkMate();
 	void showWinningMessage();
