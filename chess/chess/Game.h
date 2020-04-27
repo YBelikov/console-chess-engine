@@ -32,7 +32,7 @@ private:
 	std::unique_ptr<Board> board;
 	std::unique_ptr<Loader> loader;
 	std::vector<std::pair<Position, Position>> movesStory;
-	std::vector<Position> attackersPositions;
+	Position attackersPosition;
 	int numberOfAttackers;
 
 	std::unique_ptr<Writer> writer;
