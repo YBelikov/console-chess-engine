@@ -5,65 +5,68 @@
 
 using std::logic_error;
 
-void Pawn::canMove(Game& game, const Position& from, const Position& to) {
+bool Pawn::canMove(Game& game, const Position& from, const Position& to) {
 	if (from.getXPosition() == to.getXPosition()) {
 		if ((color == Color::White && to.getYPosition() == from.getYPosition() - 1) ||
 			(color == Color::Black && to.getYPosition() == from.getYPosition() + 1)) {
-			return;
+			return true;
 		}
 		else if ((color == Color::White && to.getYPosition() == from.getYPosition() - 2) ||
 			(color == Color::Black && to.getYPosition() == from.getYPosition() + 2) ) {
-			checkDoubleMove(game, from, to);
+			return checkDoubleMove(game, from, to);
 		}
 		else {
-			throw logic_error("Pawn can't make this move\n");
+			return false;
 		}
 	}
 	else if (color == Color::White && from.getYPosition() == 3 && to.getYPosition() == 2 && abs(from.getXPosition() - to.getXPosition()) == 1 ||
 		color == Color::Black && from.getYPosition() == 4 && to.getYPosition() == 5 && abs(from.getXPosition() - to.getXPosition()) == 1) {
 		auto lastMove = game.getLastMoveFromStory();
-		checkForEnpassant(game, from, to, lastMove);
+		if (!checkForEnpassant(game, from, to, lastMove)) return false;
 		game.getBoard().getCell(lastMove.second).releasePiece();
 	}
 	else if(abs(to.getYPosition() - from.getYPosition()) == 1) {
-		checkForCapturing(game, from, to);
+		return checkForCapturing(game, from, to);
 	}
 	else {
-		throw logic_error("Pawn can't move simply by row\n");
+		return false;
 	}
 	
 }
 
-void Pawn::checkDoubleMove(Game& game, const Position& from, const Position& to) {
+bool Pawn::checkDoubleMove(Game& game, const Position& from, const Position& to) {
 	if (color == Color::White) {
-		checkWhiteDoubleMove(game, from, to);
+		return checkWhiteDoubleMove(game, from, to);
 	}
 	else {
-		checkBlackDoubleMove(game, from, to);
+		return checkBlackDoubleMove(game, from, to);
 	}
 }
 
-void Pawn::checkWhiteDoubleMove(Game& game, const Position& from, const Position& to) {
+bool Pawn::checkWhiteDoubleMove(Game& game, const Position& from, const Position& to) {
 	if (!(game.getBoard().getCell(Position(to.getYPosition() + 1, to.getXPosition())).isEmpty() && game.getBoard().getCell(Position(to.getYPosition(), to.getXPosition())).isEmpty() &&
 		(from.getYPosition() == 6))) {
-		throw logic_error("Pawn can't make double move, it's not on origin row\n");
+		return false;
 	}
+	return true;
 }
 
-void Pawn::checkBlackDoubleMove(Game& game, const Position& from, const Position& to) {
+bool Pawn::checkBlackDoubleMove(Game& game, const Position& from, const Position& to) {
 	if (!(game.getBoard().getCell(Position(to.getYPosition() - 1, to.getXPosition())).isEmpty() && game.getBoard().getCell(Position(to.getYPosition(), to.getXPosition())).isEmpty() &&
 		(from.getYPosition() == 1))) {
-		throw logic_error("Pawn can't make double move, it's not on origin row\n");
+		return false;
 	}
+	return true;
 }
 
-void Pawn::checkForCapturing(Game& game, const Position& from, const Position& to) {
+bool Pawn::checkForCapturing(Game& game, const Position& from, const Position& to) {
 	if ((color == Color::White && to.getYPosition() == from.getYPosition() - 1) ||
 		(color == Color::Black && to.getYPosition() == from.getYPosition() + 1)) {
 		if (game.getBoard().getCell(to).isEmpty()) {
-			throw logic_error("Pawn can't move on diagonals\n");
+			return false;
 		}
 	}
+	return true;
 }
 
 void Pawn::checkForPromotion(Game& game, const Position& from, const Position& to) {
@@ -72,9 +75,9 @@ void Pawn::checkForPromotion(Game& game, const Position& from, const Position& t
 	}
 }
 
-void Pawn::checkForEnpassant(Game& game, const Position& from, const Position& to, std::pair<Position, Position>& lastMove) {
+bool Pawn::checkForEnpassant(Game& game, const Position& from, const Position& to, std::pair<Position, Position>& lastMove) {
 	auto lastPosition = lastMove.second;
-	if (game.getBoard().getCell(lastPosition).getPiece().getPieceType() != PieceType::Pawn) throw logic_error("You can't make enpassant for non paws!\n");
+	if (game.getBoard().getCell(lastPosition).getPiece().getPieceType() != PieceType::Pawn) return false;
 	if (!(abs(lastMove.first.getYPosition() - lastMove.second.getYPosition()) == 2 && abs(from.getXPosition() - lastPosition.getXPosition()) == 1))
-		throw logic_error("Something went wrong with your enpassant!\n");
+		return false;
 }

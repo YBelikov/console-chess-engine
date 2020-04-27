@@ -4,15 +4,15 @@
 
 class Pawn : public Piece {
 private:
-	void checkWhiteDoubleMove(Game&, const Position&, const Position&);
-	void checkBlackDoubleMove(Game&, const Position&, const Position&);
+	bool checkWhiteDoubleMove(Game&, const Position&, const Position&);
+	bool checkBlackDoubleMove(Game&, const Position&, const Position&);
 public:
 	Pawn() = default;
 	~Pawn() = default;
 	Pawn(Color col) : Piece(PieceType::Pawn, col) {}
-	void canMove(Game&, const Position&, const Position&) override;
-	void checkDoubleMove(Game&, const Position&, const Position&);
-	void checkForCapturing(Game&, const Position&, const Position&);
+	bool canMove(Game&, const Position&, const Position&) override;
+	bool checkDoubleMove(Game&, const Position&, const Position&);
+	bool checkForCapturing(Game&, const Position&, const Position&);
 	void checkForPromotion(Game&, const Position&, const Position&);
-	void checkForEnpassant(Game&, const Position&, const Position&, std::pair<Position, Position>&);
+	bool checkForEnpassant(Game&, const Position&, const Position&, std::pair<Position, Position>&);
 };
