@@ -421,8 +421,8 @@ bool Game::checkMate(){
 	for (auto& move : kingPossibleMoves) {
 		testPosition.changeXPosition(move.getXPosition());
 		testPosition.changeYPosition(move.getYPosition());
-		if (testPosition.getXPosition() < 0 || testPosition.getXPosition() > board->size()
-			|| testPosition.getYPosition() < 0 || testPosition.getYPosition() > board->size()) continue;
+		if (testPosition.getXPosition() < 0 || testPosition.getXPosition() > board->size() - 1
+			|| testPosition.getYPosition() < 0 || testPosition.getYPosition() > board->size() - 1) continue;
 		if (!board->getCell(testPosition).isEmpty()) continue;
 		if (!wouldKingBeInCheck(currentKingPosition, testPosition)) return false;
 		testPosition = currentKingPosition;
