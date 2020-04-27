@@ -72,8 +72,9 @@ bool Pawn::checkForCapturing(Game& game, const Position& from, const Position& t
 		if (game.getBoard().getCell(to).isEmpty() || game.getBoard().getCell(to).getPiece().getPieceType() == PieceType::King) {
 			return false;
 		}
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void Pawn::checkForPromotion(Game& game, const Position& from, const Position& to) {
