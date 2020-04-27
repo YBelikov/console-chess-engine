@@ -239,11 +239,12 @@ bool Game::doesKingInCheck() {
 }
 
 Position Game::findKingPosition(Color& turnColor) {
-	for (auto& row : *board) {
-		for (auto& cell : row) {
-			if (!cell.isEmpty()) {
-				if (cell.getPiece().getPieceType() == PieceType::King && turnColor == cell.getPiece().getColorOfPiece())
-					return cell.getPosition();
+	for (int y = 0; y < board->size(); ++y) {
+		for (int x = 0; x < board->size(); ++x) {
+			if (!board->getCell(Position(y,x)).isEmpty() 
+				&& board->getCell(Position(y, x)).getPiece().getPieceType() == PieceType::King 
+				&& turnColor == board->getCell(Position(y, x)).getPiece().getColorOfPiece()) {
+				return Position(y, x);
 			}
 		}
 	}
