@@ -32,6 +32,9 @@ bool Pawn::canMove(Game& game, const Position& from, const Position& to) {
 		}
 		return isValid;
 	}
+	else if (abs(to.getXPosition() - from.getXPosition()) == 1) {
+		return checkForCapturing(game, from, to);
+	}
 	else {
 		return false;
 	}
