@@ -20,13 +20,13 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{4290DF67-A748-44DA-8FC8-27AA0827783C}</ProjectGuid>
-    <RootNamespace>chess</RootNamespace>
+    <ProjectGuid>{3E77DFD8-8B7E-44C3-8AC2-71D217C58BA5}</ProjectGuid>
+    <RootNamespace>testChess</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -69,7 +69,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\cpp\repos\googleTest\googletest\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -124,40 +126,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\chess\Bishop.cpp" />
+    <ClCompile Include="..\chess\Board.cpp" />
+    <ClCompile Include="..\chess\Cell.cpp" />
+    <ClCompile Include="..\chess\Display.cpp" />
+    <ClCompile Include="..\chess\Game.cpp" />
+    <ClCompile Include="..\chess\King.cpp" />
+    <ClCompile Include="..\chess\Knight.cpp" />
+    <ClCompile Include="..\chess\Loader.cpp" />
+    <ClCompile Include="..\chess\Parser.cpp" />
+    <ClCompile Include="..\chess\Pawn.cpp" />
+    <ClCompile Include="..\chess\Position.cpp" />
+    <ClCompile Include="..\chess\Queen.cpp" />
+    <ClCompile Include="..\chess\Rook.cpp" />
+    <ClCompile Include="..\chess\Writer.cpp" />
+    <ClCompile Include="BishopTest.cpp" />
+    <ClCompile Include="BoardTest.cpp" />
+    <ClCompile Include="KnightTest.cpp" />
+    <ClCompile Include="ParserTest.cpp" />
+    <ClCompile Include="PawnTest.cpp" />
+    <ClCompile Include="QueenTest.cpp" />
+    <ClCompile Include="RookTest.cpp" />
+    <ClCompile Include="KingTest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\googleTest\googleTest.vcxproj">
+      <Project>{68fdba38-7537-4c07-8f49-7d750066c89c}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\chess\Pawn.h" />
+    <ClInclude Include="..\chess\Piece.h" />
+    <ClInclude Include="..\chess\PieceType.h" />
+    <ClInclude Include="..\chess\Position.h" />
+    <ClInclude Include="..\chess\Queen.h" />
+    <ClInclude Include="..\chess\Rook.h" />
+    <ClInclude Include="..\chess\Writer.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Display.h" />
-    <ClInclude Include="Loader.h" />
-    <ClInclude Include="Parser.h" />
-    <ClInclude Include="PieceType.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
-    <ClInclude Include="Pawn.h" />
-    <ClInclude Include="Piece.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="Queen.h" />
-    <ClInclude Include="Rook.h" />
-    <ClInclude Include="Writer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Bishop.cpp" />
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Display.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Knight.cpp" />
-    <ClCompile Include="Loader.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Pawn.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Queen.cpp" />
-    <ClCompile Include="Rook.cpp" />
-    <ClCompile Include="King.cpp" />
-    <ClCompile Include="Writer.cpp" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="Parser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

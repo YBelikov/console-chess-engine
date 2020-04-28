@@ -15,6 +15,7 @@ Piece& Cell::getPiece() {
 }
 
 void Cell::setPiece(unique_ptr<Piece> newPiece) {
+	std::cout << "set piece\n";
 	piece = std::move(newPiece);
 }
 
